@@ -5,116 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Screen a Candidate - HireAI</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gradient-to-br from-slate-900 via-slate-800 to-indigo-900">
-    <!-- Navbar -->
-    <nav class="navbar">
-        <div class="container mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <a href="index.html" class="text-2xl font-bold text-white">
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500">HireAI</span>
-                </a>
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="index.html" class="text-sm font-medium text-indigo-200 hover:text-white transition-colors">Home</a>
-                    <a href="upload.html" class="text-sm font-medium text-white hover:text-indigo-200 transition-colors">Screen Candidates</a>
-                    <a href="dashboard.html" class="text-sm font-medium text-indigo-200 hover:text-white transition-colors">Dashboard</a>
-                </div>
-                <button class="md:hidden text-white" onclick="toggleMenu()">
-                    <i data-lucide="menu" class="h-6 w-6"></i>
-                </button>
-            </div>
-        </div>
-    </nav>
 
-    <!-- Mobile Menu -->
-    <div class="mobile-menu hidden md:hidden absolute w-full bg-slate-900/95 backdrop-blur-md z-50">
-        <div class="container mx-auto px-6 py-4 flex flex-col space-y-4">
-            <a href="index.html" class="text-white hover:text-indigo-400 transition-colors">Home</a>
-            <a href="upload.html" class="text-white hover:text-indigo-400 transition-colors">Screen Candidates</a>
-            <a href="dashboard.html" class="text-white hover:text-indigo-400 transition-colors">Dashboard</a>
+<body class="bg-slate-900 text-white">
+
+<div class="max-w-3xl mx-auto mt-10 p-6 bg-slate-800 rounded-xl">
+
+    <h1 class="text-2xl font-bold mb-6">Screen Candidate</h1>
+
+    <!-- Job Description -->
+    <textarea id="jobDescription" placeholder="Paste job description..."
+        class="w-full p-3 mb-6 bg-slate-700 rounded"></textarea>
+
+    <!-- Upload Section -->
+    <div id="resumeDropZone" class="border-2 border-dashed p-8 text-center cursor-pointer rounded-lg">
+
+        <!-- ✅ IMPORTANT: input OUTSIDE -->
+        <input type="file" id="resumeFile" accept=".pdf,.txt" class="hidden">
+
+        <div id="dropZoneContent">
+            <p>Drag & Drop Resume OR Click</p>
+        </div>
+
+        <div id="selectedFile" class="hidden">
+            <p id="filename"></p>
+            <button type="button">Remove</button>
         </div>
     </div>
 
-    <!-- API Key Warning Banner -->
-    <div id="apiKeyBanner" class="hidden bg-gradient-to-r from-amber-600 to-orange-600 text-white py-3">
-        <div class="container mx-auto px-6 text-center">
-            <i data-lucide="warning" class="inline-block mr-2 h-5 w-5"></i>
-            <span class="text-sm">⚠️ Add your Gemini API key in app.js to activate AI features</span>
-        </div>
-    </div>
+    <!-- Paste Resume -->
+    <textarea id="resumeText" placeholder="Or paste resume text..."
+        class="w-full p-3 mt-6 bg-slate-700 rounded"></textarea>
 
-    <!-- Main Content -->
-    <section class="py-16">
-        <div class="container mx-auto px-6">
-            <div class="max-w-4xl mx-auto bg-slate-800/50 backdrop-blur-md border border-slate-600 rounded-2xl p-8 shadow-2xl shadow-purple-500/10">
-                <div class="text-center mb-10">
-                    <h1 class="text-3xl md:text-4xl font-bold text-white mb-4">Screen a Candidate</h1>
-                    <p class="text-indigo-200">Upload a resume and provide job details for AI-powered analysis</p>
-                </div>
+    <!-- Button -->
+    <button onclick="screenNow()"
+        class="mt-6 px-6 py-3 bg-purple-600 rounded">
+        Screen Now
+    </button>
 
-                <!-- Job Description Input -->
-                <div class="mb-8">
-                    <label class="block text-sm font-semibold text-indigo-200 mb-3">Job Description</label>
-                    <textarea id="jobDescription" class="w-full h-32 p-4 bg-slate-900/50 border border-slate-600 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-slate-500 transition-all" placeholder="Paste the job description here..."></textarea>
-                </div>
+</div>
 
-                <!-- File Upload -->
-                <div class="mb-8">
-                    <label class="block text-sm font-semibold text-indigo-200 mb-3">Resume File (PDF only)</label>
-                    <!-- UPDATED ID HERE -->
-                    <div id="resumeDropZone" class="border-2 border-dashed border-slate-600 rounded-xl p-10 text-center hover:border-purple-500/50 transition-all cursor-pointer bg-slate-900/30">
-                        <div id="dropZoneContent">
-                            <i data-lucide="file-text" class="h-12 w-12 mx-auto text-indigo-400 mb-4"></i>
-                            <p class="text-white font-medium mb-2">Drag & Drop your PDF here</p>
-                            <p class="text-slate-400 text-sm">or click to browse files</p>
-                            <input type="file" id="resumeFile" accept=".pdf" class="hidden" />
-                        </div>
-                        <div id="selectedFile" class="hidden">
-                            <i data-lucide="check-circle" class="h-10 w-10 mx-auto text-green-400 mb-3"></i>
-                            <p class="text-white font-medium" id="filename">resume.pdf</p>
-                            <button class="text-red-400 text-sm mt-2 hover:text-red-300">Remove file</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Manual Text Fallback -->
-                <div class="mb-8">
-                    <label class="block text-sm font-semibold text-indigo-200 mb-3">Or Paste Resume Text</label>
-                    <textarea id="resumeText" class="w-full h-40 p-4 bg-slate-900/50 border border-slate-600 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent text-white placeholder-slate-500 transition-all" placeholder="Paste the resume text here if you can't upload a file..."></textarea>
-                </div>
-
-                <!-- Screen Button -->
-                <div class="text-center">
-                    <!-- UPDATED ONCLICK HERE -->
-                    <button id="screenBtn" onclick="screenNow()" class="px-10 py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white rounded-xl font-semibold text-lg shadow-lg shadow-purple-500/30 transition-all transform hover:scale-105 flex items-center justify-center space-x-3 mx-auto">
-                        <span>Screen Now</span>
-                        <div id="loadingSpinner" class="hidden">
-                            <div class="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
-                        </div>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-slate-900 py-12 border-t border-slate-800">
-        <div class="container mx-auto px-6 text-center">
-            <div class="mb-8">
-                <a href="index.html" class="text-2xl font-bold text-white">
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500">HireAI</span>
-                </a>
-            </div>
-            <div class="text-slate-400 text-sm">
-                © 2025 HireAI. All rights reserved. Intelligent Recruitment Solutions.
-            </div>
-        </div>
-    </footer>
-
-    <script src="app.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
